@@ -169,13 +169,13 @@ export default function SavingsGoals() {
       {goals.length > 0 && (
         <div className="grid grid-cols-3 gap-4">
           {[
-            { label: 'Total Saved',  value: formatCurrency(totalSaved, currency),  color: 'text-emerald-500' },
-            { label: 'Total Target', value: formatCurrency(totalTarget, currency), color: 'text-primary-500' },
-            { label: 'Completed',    value: `${completed} / ${goals.length}`,      color: 'text-amber-500' },
+            { label: 'Total Saved',  value: formatCurrency(totalSaved, currency),  color: 'text-emerald-600 dark:text-emerald-400', bg: 'from-emerald-50 to-teal-50 dark:from-emerald-900/10 dark:to-teal-900/10', border: 'border-emerald-100 dark:border-emerald-800/30' },
+            { label: 'Total Target', value: formatCurrency(totalTarget, currency), color: 'text-primary-600 dark:text-primary-400', bg: 'from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10',     border: 'border-blue-100 dark:border-blue-800/30' },
+            { label: 'Completed',    value: `${completed} / ${goals.length}`,      color: 'text-amber-600 dark:text-amber-400',   bg: 'from-amber-50 to-yellow-50 dark:from-amber-900/10 dark:to-yellow-900/10', border: 'border-amber-100 dark:border-amber-800/30' },
           ].map(s => (
-            <div key={s.label} className="card text-center">
-              <p className="text-xs text-gray-400 mb-1">{s.label}</p>
-              <p className={`font-bold text-base ${s.color}`}>{s.value}</p>
+            <div key={s.label} className={`rounded-2xl bg-gradient-to-br ${s.bg} border ${s.border} p-4 text-center`}>
+              <p className="text-xs text-gray-400 mb-1 font-medium">{s.label}</p>
+              <p className={`font-extrabold text-base ${s.color}`}>{s.value}</p>
             </div>
           ))}
         </div>

@@ -114,13 +114,13 @@ export default function Transactions() {
       {/* Summary pills */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: 'Balance',  value: balance,       color: 'text-primary-600 dark:text-primary-400' },
-          { label: 'Income',   value: totalIncome,   color: 'text-emerald-600' },
-          { label: 'Expenses', value: totalExpense,  color: 'text-red-500' },
+          { label: 'Balance',  value: balance,       color: 'text-primary-600 dark:text-primary-400', bg: 'from-primary-50 to-blue-50 dark:from-primary-900/10 dark:to-blue-900/10', border: 'border-primary-100 dark:border-primary-800/30' },
+          { label: 'Income',   value: totalIncome,   color: 'text-emerald-600 dark:text-emerald-400', bg: 'from-emerald-50 to-green-50 dark:from-emerald-900/10 dark:to-green-900/10', border: 'border-emerald-100 dark:border-emerald-800/30' },
+          { label: 'Expenses', value: totalExpense,  color: 'text-red-500 dark:text-red-400',         bg: 'from-red-50 to-rose-50 dark:from-red-900/10 dark:to-rose-900/10',         border: 'border-red-100 dark:border-red-800/30' },
         ].map(s => (
-          <div key={s.label} className="card text-center">
-            <p className="text-xs text-gray-400 mb-1">{s.label}</p>
-            <p className={`font-bold text-lg ${s.color}`}>{formatCurrency(s.value, currency)}</p>
+          <div key={s.label} className={`rounded-2xl bg-gradient-to-br ${s.bg} border ${s.border} p-4 text-center`}>
+            <p className="text-xs text-gray-400 mb-1 font-medium">{s.label}</p>
+            <p className={`font-extrabold text-lg ${s.color}`}>{formatCurrency(s.value, currency)}</p>
           </div>
         ))}
       </div>

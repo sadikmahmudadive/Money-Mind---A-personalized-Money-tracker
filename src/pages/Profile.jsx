@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import { uploadToCloudinary } from '../cloudinary'
 import { CURRENCIES } from '../utils/formatCurrency'
 import toast from 'react-hot-toast'
-import { HiCamera } from 'react-icons/hi'
+import { HiCamera, HiUser, HiCog, HiShieldCheck } from 'react-icons/hi'
 
 export default function Profile() {
   const { user, profile, updateUserProfile } = useAuth()
@@ -44,32 +44,65 @@ export default function Profile() {
   }
 
   const initials = (name || 'U').charAt(0).toUpperCase()
+  const provider  = user?.providerData?.[0]?.providerId?.replace('.com', '') ?? 'email'
 
   return (
     <div className="max-w-lg mx-auto animate-fadeIn space-y-6">
-      <h1 className="text-2xl font-extrabold">Profile Settings</h1>
 
-      {/* Avatar */}
-      <div className="card flex flex-col items-center gap-4">
-        <div className="relative">
-          {preview
-            ? <img src={preview} alt="avatar" className="w-24 h-24 rounded-full object-cover ring-4 ring-primary-200" />
-            : <div className="w-24 h-24 rounded-full bg-primary-500 text-white text-3xl font-bold flex items-center justify-center ring-4 ring-primary-200">{initials}</div>
-          }
-          <button onClick={() => fileRef.current.click()}
-            className="absolute bottom-0 right-0 bg-primary-500 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg hover:bg-primary-600 transition">
-            <HiCamera className="w-4 h-4" />
-          </button>
-          <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+      {/* Hero avatar card */}
+      <div className="rounded-2xl overflow-hidden shadow-card-lg border border-gray-100 dark:border-gray-800">
+        {/* Gradient banner */}
+        <div
+          className="h-28 relative"
+          style={{ background: 'linear-gradient(135deg,#0ea5e9 0%,#7c3aed 60%,#ec4899 100%)' }}
+        >
+          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_top_left,white_0%,transparent_60%)]" />
         </div>
-        <div className="text-center">
-          <p className="font-semibold">{profile?.name ?? user?.displayName}</p>
-          <p className="text-sm text-gray-400">{user?.email}</p>
+
+        {/* Avatar + info */}
+        <div className="bg-white dark:bg-gray-900 px-6 pb-5 relative">
+          <div className="flex items-end gap-4 -mt-12 mb-4">
+            <div className="relative shrink-0">
+              {preview
+                ? <img src={preview} alt="avatar"
+                    className="w-20 h-20 rounded-2xl object-cover ring-4 ring-white dark:ring-gray-900 shadow-lg" />
+                : <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-400 to-purple-600
+                                  text-white text-3xl font-bold flex items-center justify-center
+                                  ring-4 ring-white dark:ring-gray-900 shadow-lg">
+                    {initials}
+                  </div>
+              }
+              <button
+                onClick={() => fileRef.current.click()}
+                className="absolute -bottom-1.5 -right-1.5 bg-primary-500 hover:bg-primary-600
+                           text-white w-7 h-7 rounded-xl flex items-center justify-center shadow-md transition"
+              >
+                <HiCamera className="w-3.5 h-3.5" />
+              </button>
+              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+            </div>
+
+            <div className="pb-1 min-w-0">
+              <p className="font-extrabold text-lg text-gray-900 dark:text-white truncate">
+                {profile?.name ?? user?.displayName ?? 'User'}
+              </p>
+              <p className="text-sm text-gray-400 truncate">{user?.email}</p>
+              <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-[11px] font-semibold
+                               bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
+                <HiShieldCheck className="w-3 h-3" />
+                {provider.charAt(0).toUpperCase() + provider.slice(1)}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Form */}
       <form onSubmit={handleSave} className="card space-y-5">
+        <div className="flex items-center gap-2 mb-1">
+          <HiCog className="w-4 h-4 text-primary-500" />
+          <h2 className="font-bold text-gray-800 dark:text-gray-200">Account Settings</h2>
+        </div>
         <div>
           <label className="label">Full Name</label>
           <input className="input" value={name} onChange={e => setName(e.target.value)} required />
@@ -77,7 +110,7 @@ export default function Profile() {
 
         <div>
           <label className="label">Email</label>
-            <input className="input opacity-60 cursor-not-allowed" value={user?.email ?? ''} disabled />
+          <input className="input opacity-60 cursor-not-allowed" value={user?.email ?? ''} disabled />
         </div>
 
         <div>
@@ -94,24 +127,23 @@ export default function Profile() {
       </form>
 
       {/* Account info */}
-      <div className="card space-y-2">
-        <h3 className="font-semibold text-sm mb-2">Account Info</h3>
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-400">Provider</span>
-          <span className="font-medium capitalize">{user?.providerData?.[0]?.providerId?.replace('.com','') ?? 'email'}</span>
+      <div className="card space-y-3">
+        <div className="flex items-center gap-2 mb-1">
+          <HiUser className="w-4 h-4 text-primary-500" />
+          <h3 className="font-bold text-gray-800 dark:text-gray-200 text-sm">Account Info</h3>
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-400">User ID</span>
-          <span className="font-mono text-xs text-gray-500 truncate max-w-[180px]">{user?.uid}</span>
-        </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-400">Member Since</span>
-          <span className="font-medium">
-            {user?.metadata?.creationTime
-              ? new Date(user.metadata.creationTime).toLocaleDateString()
-              : '—'}
-          </span>
-        </div>
+        {[
+          { label: 'Provider',      value: provider.charAt(0).toUpperCase() + provider.slice(1) },
+          { label: 'User ID',       value: user?.uid, mono: true },
+          { label: 'Member Since',  value: user?.metadata?.creationTime ? new Date(user.metadata.creationTime).toLocaleDateString() : '—' },
+        ].map(row => (
+          <div key={row.label} className="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-800 last:border-0">
+            <span className="text-xs text-gray-400 font-medium">{row.label}</span>
+            <span className={`text-xs font-semibold text-gray-700 dark:text-gray-300 truncate max-w-[200px] ${
+              row.mono ? 'font-mono text-gray-500' : ''
+            }`}>{row.value}</span>
+          </div>
+        ))}
       </div>
     </div>
   )

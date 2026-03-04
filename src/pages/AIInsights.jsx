@@ -66,7 +66,7 @@ function AICard({ title, desc, onGenerate, result, loading }) {
                 <div key={i} className="w-2 h-2 rounded-full bg-primary-400 animate-bounce" style={{ animationDelay: `${i*0.15}s` }} />
               ))}
             </div>
-            <p className="text-xs text-gray-400">Gemini is analyzing your data…</p>
+            <p className="text-xs text-gray-400">Llama is analyzing your data…</p>
           </div>
         </div>
       )}
@@ -139,7 +139,7 @@ export default function AIInsights() {
         <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-4 flex gap-3">
           <HiLockClosed className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
           <div>
-            <p className="font-semibold text-amber-700 dark:text-amber-400 text-sm">Gemini API key required</p>
+            <p className="font-semibold text-amber-700 dark:text-amber-400 text-sm">Groq API key required</p>
             <p className="text-xs text-amber-600 dark:text-amber-300 mt-0.5">
               Get a free key at{' '}
               <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer"

@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import BudgetCard from '../components/BudgetCard'
 import { CATEGORIES } from '../utils/categories'
 import { isInMonth } from '../utils/dateHelpers'
+import { formatCurrency } from '../utils/formatCurrency'
 import { format } from 'date-fns'
 import toast from 'react-hot-toast'
 import { HiPlus } from 'react-icons/hi'
@@ -57,6 +58,11 @@ export default function BudgetManager() {
     </div>
   )
 
+  // Overall budget summary
+  const totalLimit = budgetsWithSpent.reduce((s, b) => s + b.limit, 0)
+  const totalSpent = budgetsWithSpent.reduce((s, b) => s + b.spent, 0)
+  const overallPct = totalLimit > 0 ? Math.min((totalSpent / totalLimit) * 100, 100) : 0
+
   return (
     <div className="space-y-6 animate-fadeIn">
       <div className="flex items-center justify-between">
@@ -73,15 +79,48 @@ export default function BudgetManager() {
         )}
       </div>
 
+      {/* Overall summary card */}
+      {budgetsWithSpent.length > 0 && (
+        <div
+          className="rounded-2xl p-5 text-white relative overflow-hidden"
+          style={{ background: 'linear-gradient(135deg,#0ea5e9 0%,#7c3aed 100%)' }}
+        >
+          <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+          <p className="text-xs font-bold uppercase tracking-widest text-white/70 mb-1">Monthly Overview</p>
+          <div className="flex items-end justify-between mb-3">
+            <p className="text-3xl font-extrabold">{formatCurrency(totalSpent, currency)}</p>
+            <p className="text-white/70 text-sm">of {formatCurrency(totalLimit, currency)}</p>
+          </div>
+          <div className="h-2 bg-white/20 rounded-full overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-700"
+              style={{
+                width: `${overallPct}%`,
+                background: overallPct > 85 ? '#ef4444' : overallPct > 65 ? '#f59e0b' : '#10b981',
+              }}
+            />
+          </div>
+          <p className="text-xs text-white/60 mt-1.5">{overallPct.toFixed(0)}% of total budget used</p>
+        </div>
+      )}
+
       {/* Alerts */}
       {alerts.length > 0 && (
-        <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700 rounded-xl p-4 space-y-1">
-          <p className="font-semibold text-orange-700 dark:text-orange-400 text-sm">⚠️ Budget Alerts</p>
-          {alerts.map(b => (
-            <p key={b.category} className="text-xs text-orange-600 dark:text-orange-300">
-              {b.category}: {((b.spent / b.limit) * 100).toFixed(0)}% used — only {(b.limit - b.spent).toLocaleString()} left
-            </p>
-          ))}
+        <div className="rounded-xl border border-orange-200 dark:border-orange-700 bg-orange-50 dark:bg-orange-900/20 p-4 space-y-2">
+          <p className="font-bold text-orange-700 dark:text-orange-400 text-sm flex items-center gap-1.5">⚠️ Budget Alerts</p>
+          {alerts.map(b => {
+            const pct = ((b.spent / b.limit) * 100).toFixed(0)
+            return (
+              <div key={b.category} className="flex items-center justify-between text-xs">
+                <span className="font-medium text-orange-700 dark:text-orange-300">{b.category}</span>
+                <span className={`font-bold px-2 py-0.5 rounded-full ${
+                  pct >= 100
+                    ? 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400'
+                    : 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'
+                }`}>{pct}% — {formatCurrency(b.limit - b.spent, currency)} left</span>
+              </div>
+            )
+          })}
         </div>
       )}
 

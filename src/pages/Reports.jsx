@@ -145,14 +145,14 @@ export default function Reports() {
       {/* Summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
-          { label: 'Total Income',   val: formatCurrency(totalIncome,  currency), color: 'text-emerald-500' },
-          { label: 'Total Expenses', val: formatCurrency(totalExpense, currency), color: 'text-red-500'     },
-          { label: 'Net Savings',    val: formatCurrency(totalIncome - totalExpense, currency), color: totalIncome >= totalExpense ? 'text-primary-500' : 'text-red-500' },
-          { label: 'Savings Rate',   val: `${savingsRate}%`, color: 'text-purple-500' },
+          { label: 'Total Income',   val: formatCurrency(totalIncome,  currency), color: 'text-emerald-600 dark:text-emerald-400', bg: 'from-emerald-50 to-teal-50 dark:from-emerald-900/10 dark:to-teal-900/10', border: 'border-emerald-100 dark:border-emerald-800/30' },
+          { label: 'Total Expenses', val: formatCurrency(totalExpense, currency), color: 'text-red-600 dark:text-red-400',         bg: 'from-red-50 to-rose-50 dark:from-red-900/10 dark:to-rose-900/10',         border: 'border-red-100 dark:border-red-800/30' },
+          { label: 'Net Savings',    val: formatCurrency(totalIncome - totalExpense, currency), color: totalIncome >= totalExpense ? 'text-primary-600 dark:text-primary-400' : 'text-red-600 dark:text-red-400', bg: 'from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10', border: 'border-blue-100 dark:border-blue-800/30' },
+          { label: 'Savings Rate',   val: `${savingsRate}%`,                       color: 'text-purple-600 dark:text-purple-400', bg: 'from-purple-50 to-violet-50 dark:from-purple-900/10 dark:to-violet-900/10', border: 'border-purple-100 dark:border-purple-800/30' },
         ].map(s => (
-          <div key={s.label} className="card text-center">
-            <p className="text-xs text-gray-400 mb-1">{s.label}</p>
-            <p className={`font-bold text-lg ${s.color}`}>{s.val}</p>
+          <div key={s.label} className={`rounded-2xl bg-gradient-to-br ${s.bg} border ${s.border} p-4 text-center`}>
+            <p className="text-xs text-gray-400 mb-1 font-medium">{s.label}</p>
+            <p className={`font-extrabold text-lg ${s.color}`}>{s.val}</p>
           </div>
         ))}
       </div>
