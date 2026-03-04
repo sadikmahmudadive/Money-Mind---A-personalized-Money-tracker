@@ -208,12 +208,55 @@ users/{uid}/
 
 ## 🔒 Security
 
-- `.env` is listed in `.gitignore` — API keys are never committed
-- All Firestore reads/writes are scoped to `users/{uid}` — users can only access their own data
-- Cloudinary uses unsigned upload presets (no server secret exposed)
+This app handles sensitive personal financial data. Multiple layers of protection are in place.
+
+### 🔑 API Keys & Secrets
+| Secret | Protection |
+|---|---|
+| Firebase config | Stored in `.env`, excluded from git via `.gitignore` — never committed |
+| Groq API key | Stored in `.env`, excluded from git — never committed |
+| Cloudinary | Uses **unsigned upload preset** — no server secret is ever exposed to the client |
+
+### 🛡️ Firestore Security Rules (`firestore.rules`)
+
+Production-grade rules are deployed on the database. Every request is validated server-side by Firebase before any data is touched.
+
+**Core principles:**
+
+| Rule | Effect |
+|---|---|
+| **Authentication required** | Any request without a valid login token is instantly rejected — no anonymous reads |
+| **Strict user isolation** | Each user can only access `users/{theirUID}/…` — User A **cannot** read, write, or delete User B's data under any circumstances |
+| **Write validation** | Every write is checked server-side: `type` must be `"income"` or `"expense"`, `amount` must be a positive number ≤ 10 crore BDT, all strings have enforced length limits |
+| **No wildcard access** | Any Firestore path not explicitly listed in the rules returns `PERMISSION_DENIED` by default |
+| **Profile deletion blocked** | Profile documents cannot be deleted directly through the app — only via a proper account deletion flow |
+
+**What the rules protect against:**
+- 🚫 Unauthenticated API calls scraping your data
+- 🚫 One user reading another user's transactions, budgets, or goals
+- 🚫 Malformed or malicious writes (e.g. injecting huge strings, negative amounts, invalid types)
+- 🚫 Access to undocumented or future Firestore collections
+- 🚫 Even the developer cannot read user data through the app (only via Firebase Console with explicit admin access)
+
+**Rules are version-controlled** in [`firestore.rules`](firestore.rules). To re-deploy after any change:
+```bash
+# One-time setup
+npm install -g firebase-tools
+firebase login
+
+# Deploy rules
+firebase deploy --only firestore:rules
+```
+
+### 🔐 Authentication
+- Firebase Authentication handles all login flows — passwords are **never stored** by the app
+- Google Sign-In uses OAuth 2.0 — no passwords involved
+- All Firestore listeners are automatically detached on logout
 
 ---
 
 ## 📄 License
+
+MIT © [Sadik Mahmud Adive](https://github.com/sadikmahmudadive)
 
 MIT © [Sadik Mahmud Adive](https://github.com/sadikmahmudadive)
