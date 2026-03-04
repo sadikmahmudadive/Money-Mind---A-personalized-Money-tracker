@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
@@ -7,7 +7,7 @@ import { HiEye, HiEyeOff, HiSun, HiMoon } from 'react-icons/hi'
 import { FcGoogle } from 'react-icons/fc'
 
 const perks = [
-  'Track income & expenses in à§³ BDT',
+  'Track income & expenses in ৳ BDT',
   'Upload receipts with Cloudinary',
   'AI-powered spending insights',
   'Set budgets per category',
@@ -37,7 +37,7 @@ export default function Auth() {
       if (isRegister) {
         if (!name.trim()) { toast.error('Name is required'); return }
         await register(email, pass, name)
-        toast.success('Account created! Welcome ðŸŽ‰')
+        toast.success('Account created! Welcome 🎉')
       } else {
         await login(email, pass)
         toast.success('Welcome back!')
@@ -66,8 +66,9 @@ export default function Auth() {
   return (
     <div className="min-h-screen flex">
 
-      {/* â”€â”€ Left decorative panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col items-center justify-center p-12 text-white relative overflow-hidden"
+      {/* Left decorative panel */}
+      <div
+        className="hidden lg:flex lg:w-1/2 flex-col items-center justify-center p-12 text-white relative overflow-hidden"
         style={{ background: 'linear-gradient(135deg,#0ea5e9 0%,#7c3aed 60%,#ec4899 100%)' }}
       >
         {/* Blobs */}
@@ -75,7 +76,7 @@ export default function Auth() {
         <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-purple-300/20 rounded-full blur-3xl" />
 
         <div className="relative z-10 text-center">
-          <div className="text-7xl mb-6 animate-float">ðŸ’°</div>
+          <div className="text-7xl mb-6 animate-float">💰</div>
           <h1 className="text-4xl font-extrabold mb-3 tracking-tight">MoneyMind</h1>
           <p className="text-white/70 text-base max-w-xs mb-10">
             Your smart personal finance tracker.<br />Know where every taka goes.
@@ -83,7 +84,7 @@ export default function Auth() {
           <ul className="space-y-3 text-sm text-left">
             {perks.map(t => (
               <li key={t} className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-xs">âœ“</span>
+                <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-xs">✓</span>
                 {t}
               </li>
             ))}
@@ -91,7 +92,7 @@ export default function Auth() {
         </div>
       </div>
 
-      {/* â”€â”€ Right form panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* Right form panel */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 bg-gray-50 dark:bg-gray-950 relative">
 
         {/* Theme toggle */}
@@ -107,7 +108,7 @@ export default function Auth() {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <span className="text-5xl">ðŸ’°</span>
+            <span className="text-5xl">💰</span>
             <h2 className="text-2xl font-extrabold mt-3 text-gray-900 dark:text-white">
               {isRegister ? 'Create your account' : 'Welcome back'}
             </h2>
@@ -169,7 +170,7 @@ export default function Auth() {
                   <input
                     className="input pr-10"
                     type={showPw ? 'text' : 'password'}
-                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                    placeholder="••••••••"
                     value={pass}
                     onChange={e => setPass(e.target.value)}
                     required
@@ -191,7 +192,7 @@ export default function Auth() {
                 className="btn-primary w-full text-center disabled:opacity-60 mt-2 py-3"
               >
                 {busy
-                  ? (isRegister ? 'Creating accountâ€¦' : 'Signing inâ€¦')
+                  ? (isRegister ? 'Creating account…' : 'Signing in…')
                   : (isRegister ? 'Create Account' : 'Sign In')}
               </button>
             </form>
@@ -209,7 +210,7 @@ export default function Auth() {
 
           <p className="text-center mt-3">
             <Link to="/" className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-              â† Back to home
+              ← Back to home
             </Link>
           </p>
         </div>
