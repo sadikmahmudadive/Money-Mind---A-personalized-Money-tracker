@@ -9,57 +9,88 @@ export default function TransactionList({ transactions, onDelete, currency = 'BD
 
   if (!items.length) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-        <span className="text-4xl mb-3">📭</span>
-        <p className="text-sm">No transactions found</p>
+      <div className="flex flex-col items-center justify-center py-14 text-gray-400">
+        <span className="text-5xl mb-4 opacity-60">📭</span>
+        <p className="text-sm font-medium">No transactions yet</p>
+        <p className="text-xs mt-1 text-gray-300 dark:text-gray-600">Add your first transaction to get started</p>
       </div>
     )
   }
 
   return (
-    <ul className="divide-y divide-gray-100 dark:divide-gray-800">
+    <ul className="space-y-1">
       {items.map(tx => {
         const cat = getCategoryMeta(tx.category)
+        const isIncome = tx.type === 'income'
         return (
-          <li key={tx.id} className="flex items-center gap-3 py-3 group hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-xl px-2 transition-colors">
-            {/* Icon */}
+          <li
+            key={tx.id}
+            className="flex items-center gap-3 py-2.5 px-3 rounded-xl group
+                       hover:bg-gray-50 dark:hover:bg-gray-800/60
+                       transition-all duration-150 cursor-default"
+          >
+            {/* Category icon */}
             <div
-              className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
-              style={{ background: cat.color + '22' }}
+              className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0 shadow-inner-sm"
+              style={{ background: cat.color + '1a', color: cat.color }}
             >
               {cat.icon}
             </div>
 
             {/* Info */}
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold truncate">{tx.title}</p>
-              <p className="text-xs text-gray-400">{cat.name} · {toDateString(tx.date)}</p>
-              {tx.notes && <p className="text-xs text-gray-400 truncate">{tx.notes}</p>}
-            </div>
-
-            {/* Amount */}
-            <div className="text-right shrink-0">
-              <p className={`font-bold text-sm ${tx.type === 'income' ? 'text-emerald-500' : 'text-red-500'}`}>
-                {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount, currency)}
+              <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate leading-tight">
+                {tx.title}
+              </p>
+              <p className="flex items-center gap-1.5 text-xs text-gray-400 mt-0.5">
+                <span
+                  className="inline-block px-1.5 py-0.5 rounded-md text-[10px] font-semibold"
+                  style={{ background: cat.color + '15', color: cat.color }}
+                >
+                  {cat.name}
+                </span>
+                <span>·</span>
+                <span>{toDateString(tx.date)}</span>
               </p>
             </div>
 
-            {/* Actions */}
-            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+            {/* Amount badge */}
+            <div className={`shrink-0 px-3 py-1 rounded-full text-sm font-bold
+              ${ isIncome
+                ? 'bg-emerald-50 dark:bg-emerald-900/25 text-emerald-600 dark:text-emerald-400'
+                : 'bg-red-50 dark:bg-red-900/25 text-red-600 dark:text-red-400'
+              }`}
+            >
+              {isIncome ? '+' : '-'}{formatCurrency(tx.amount, currency)}
+            </div>
+
+            {/* Action buttons — visible on hover */}
+            <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 shrink-0">
               {tx.receiptURL && (
-                <a href={tx.receiptURL} target="_blank" rel="noopener noreferrer"
-                   className="p-1.5 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-500 transition">
-                  <HiExternalLink className="w-4 h-4" />
+                <a
+                  href={tx.receiptURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-icon text-blue-500"
+                  title="View receipt"
+                >
+                  <HiExternalLink className="w-3.5 h-3.5" />
                 </a>
               )}
-              <Link to={`/edit/${tx.id}`}
-                className="p-1.5 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900/30 text-amber-500 transition">
-                <HiPencil className="w-4 h-4" />
+              <Link
+                to={`/edit/${tx.id}`}
+                className="btn-icon text-amber-500"
+                title="Edit"
+              >
+                <HiPencil className="w-3.5 h-3.5" />
               </Link>
               {onDelete && (
-                <button onClick={() => onDelete(tx.id)}
-                  className="p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 transition">
-                  <HiTrash className="w-4 h-4" />
+                <button
+                  onClick={() => onDelete(tx.id)}
+                  className="btn-icon text-red-500"
+                  title="Delete"
+                >
+                  <HiTrash className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>

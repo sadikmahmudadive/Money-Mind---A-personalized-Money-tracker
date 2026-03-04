@@ -17,6 +17,13 @@ import { isInMonth } from '../utils/dateHelpers'
 import { format } from 'date-fns'
 import toast from 'react-hot-toast'
 
+function getGreeting() {
+  const hour = new Date().getHours()
+  if (hour < 12) return 'Good morning'
+  if (hour < 17) return 'Good afternoon'
+  return 'Good evening'
+}
+
 export default function Dashboard() {
   const { profile } = useAuth()
   const { transactions, loading, deleteTransaction, totalIncome, totalExpense, balance, addTransaction } = useTransactions()
@@ -79,11 +86,14 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold">
-            Hey, {profile?.name?.split(' ')[0] ?? 'there'} 👋
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-0.5">
+            {format(new Date(), 'EEEE, MMMM d')}
+          </p>
+          <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">
+            {getGreeting()}, {profile?.name?.split(' ')[0] ?? 'there'} 👋
           </h1>
           <p className="text-sm text-gray-400 mt-0.5">
-            {format(new Date(), 'MMMM yyyy')} overview
+            Here&apos;s your {format(new Date(), 'MMMM yyyy')} overview
           </p>
         </div>
         <Link to="/add" className="btn-primary flex items-center gap-2 text-sm">
