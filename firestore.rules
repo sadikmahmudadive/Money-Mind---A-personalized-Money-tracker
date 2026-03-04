@@ -1,0 +1,150 @@
+rules_version = '2';
+
+// ─────────────────────────────────────────────────────────────────
+//  MoneyMind — Firestore Security Rules
+//  Strategy:
+//    • Only authenticated users can access ANY data.
+//    • Every user can ONLY read/write documents under their own
+//      users/{theirUID}/ path — nobody else, not even other users.
+//    • All writes are validated (types, required fields, ranges).
+//    • Everything not explicitly allowed is DENIED by default.
+// ─────────────────────────────────────────────────────────────────
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ────────────────────────────────────────────────────
+    function isAuthed() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function hasAll(fields) {
+      return incoming().keys().hasAll(fields);
+    }
+
+    function isString(val) {
+      return val is string && val.size() > 0 && val.size() <= 500;
+    }
+
+    function isPositiveNumber(val) {
+      return val is number && val > 0 && val <= 100000000; // max 10 crore BDT
+    }
+
+    // ── Transaction validation ─────────────────────────────────────
+    function validTransaction() {
+      let d = incoming();
+      return hasAll(['type', 'amount', 'category', 'date'])
+        && d.type in ['income', 'expense']
+        && isPositiveNumber(d.amount)
+        && isString(d.category)
+        && (d.title == null || (d.title is string && d.title.size() <= 200))
+        && (d.notes == null || (d.notes is string && d.notes.size() <= 1000))
+        && (d.receiptURL == null || (d.receiptURL is string && d.receiptURL.size() <= 2000));
+    }
+
+    // ── Budget validation ──────────────────────────────────────────
+    function validBudget() {
+      let d = incoming();
+      return hasAll(['category', 'limit'])
+        && isString(d.category)
+        && isPositiveNumber(d.limit);
+    }
+
+    // ── Recurring validation ───────────────────────────────────────
+    function validRecurring() {
+      let d = incoming();
+      return hasAll(['type', 'amount', 'category', 'active'])
+        && d.type in ['income', 'expense']
+        && isPositiveNumber(d.amount)
+        && isString(d.category)
+        && d.active is bool
+        && (d.dueDay == null || (d.dueDay is number && d.dueDay >= 1 && d.dueDay <= 28))
+        && (d.title == null || (d.title is string && d.title.size() <= 200));
+    }
+
+    // ── Savings goal validation ────────────────────────────────────
+    function validGoal() {
+      let d = incoming();
+      return hasAll(['name', 'targetAmount'])
+        && isString(d.name)
+        && isPositiveNumber(d.targetAmount)
+        && (d.savedAmount == null || (d.savedAmount is number && d.savedAmount >= 0))
+        && (d.deadline == null || d.deadline is string)
+        && (d.emoji == null    || (d.emoji is string && d.emoji.size() <= 10))
+        && (d.note  == null    || (d.note  is string && d.note.size() <= 500));
+    }
+
+    // ── Profile validation ─────────────────────────────────────────
+    function validProfile() {
+      let d = incoming();
+      return (d.name     == null || (d.name     is string && d.name.size()     <= 100))
+          && (d.email    == null || (d.email    is string && d.email.size()    <= 200))
+          && (d.currency == null || (d.currency is string && d.currency.size() <= 10))
+          && (d.avatar   == null || (d.avatar   is string && d.avatar.size()   <= 2000));
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    //  USER DOCUMENT TREE — users/{userId}/…
+    //  Only the owner of a UID can touch anything inside it.
+    // ════════════════════════════════════════════════════════════════
+    match /users/{userId} {
+
+      // The user document itself (not currently used, deny direct access)
+      allow read, write: if false;
+
+      // ── Transactions ─────────────────────────────────────────────
+      match /transactions/{txId} {
+        allow read:   if isOwner(userId);
+        allow create: if isOwner(userId) && validTransaction();
+        allow update: if isOwner(userId) && validTransaction();
+        allow delete: if isOwner(userId);
+      }
+
+      // ── Budgets ───────────────────────────────────────────────────
+      match /budgets/{budgetId} {
+        allow read:   if isOwner(userId);
+        allow create: if isOwner(userId) && validBudget();
+        allow update: if isOwner(userId) && validBudget();
+        allow delete: if isOwner(userId);
+      }
+
+      // ── Recurring transactions ────────────────────────────────────
+      match /recurring/{recId} {
+        allow read:   if isOwner(userId);
+        allow create: if isOwner(userId) && validRecurring();
+        allow update: if isOwner(userId) && validRecurring();
+        allow delete: if isOwner(userId);
+      }
+
+      // ── Savings goals ─────────────────────────────────────────────
+      match /goals/{goalId} {
+        allow read:   if isOwner(userId);
+        allow create: if isOwner(userId) && validGoal();
+        allow update: if isOwner(userId) && validGoal();
+        allow delete: if isOwner(userId);
+      }
+
+      // ── Profile ───────────────────────────────────────────────────
+      match /profile/{docId} {
+        allow read:   if isOwner(userId);
+        allow create: if isOwner(userId) && validProfile();
+        allow update: if isOwner(userId) && validProfile();
+        allow delete: if false; // profile deletion only via account delete flow
+      }
+    }
+
+    // ── Deny EVERYTHING else ──────────────────────────────────────
+    // Any path not matched above is completely blocked.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
