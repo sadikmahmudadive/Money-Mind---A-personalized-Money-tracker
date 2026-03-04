@@ -217,7 +217,6 @@ export default function Auth() {
     </div>
   )
 }
-  const [params]           = useSearchParams()
   const [isRegister, setIsRegister] = useState(params.get('mode') === 'register')
   const [name, setName]    = useState('')
   const [email, setEmail]  = useState('')
