@@ -5,7 +5,8 @@ import { useAuth } from '../context/AuthContext'
 import { CATEGORIES, getCategoryMeta } from '../utils/categories'
 import { formatCurrency } from '../utils/formatCurrency'
 import toast from 'react-hot-toast'
-import { HiTrash, HiRefresh, HiPlus, HiX, HiBell } from 'react-icons/hi'
+import { HiTrash, HiRefresh, HiPlus, HiX, HiBell, HiBellSlash } from 'react-icons/hi'
+import { useNotifications } from '../hooks/useNotifications'
 
 const DAYS = Array.from({ length: 28 }, (_, i) => i + 1)
 const ordinal = d => d + (d === 1 ? 'st' : d === 2 ? 'nd' : d === 3 ? 'rd' : 'th')
@@ -15,6 +16,7 @@ export default function Recurring() {
   const { addTransaction } = useTransactions()
   const { profile } = useAuth()
   const currency = profile?.currency ?? 'BDT'
+  const { supported: notifSupported, permission: notifPerm, requestPermission } = useNotifications()
 
   const [showForm, setShowForm] = useState(false)
   const [type, setType]         = useState('expense')
@@ -101,12 +103,22 @@ export default function Recurring() {
       {dueSoon.length > 0 && (
         <div className="card border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 flex items-start gap-3">
           <HiBell className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" />
-          <div>
+          <div className="flex-1">
             <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">Due in the next 7 days</p>
             <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
               {dueSoon.map(r => `${r.title} (${ordinal(r.dueDay)})`).join(' · ')}
             </p>
           </div>
+          {notifSupported && notifPerm !== 'granted' && (
+            <button onClick={async () => {
+              const result = await requestPermission()
+              if (result === 'granted') toast.success('Notifications enabled!')
+              else toast.error('Notification permission denied')
+            }}
+              className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-200 rounded-lg hover:bg-amber-300 dark:hover:bg-amber-700 transition shrink-0">
+              <HiBell className="w-3 h-3" /> Enable Alerts
+            </button>
+          )}
         </div>
       )}
 

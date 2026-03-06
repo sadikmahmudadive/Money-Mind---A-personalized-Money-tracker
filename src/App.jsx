@@ -20,6 +20,8 @@ import Profile        from './pages/Profile'
 import AIInsights     from './pages/AIInsights'
 import Recurring      from './pages/Recurring'
 import SavingsGoals   from './pages/SavingsGoals'
+import SplitExpenses  from './pages/SplitExpenses'
+import YearlySummary  from './pages/YearlySummary'
 
 function AppLayout({ children }) {
   const [sideOpen, setSideOpen] = useState(false)
@@ -90,6 +92,11 @@ export default function App() {
                 <AppLayout><SavingsGoals /></AppLayout>
               </ProtectedRoute>
             } />
+            <Route path="/splits" element={
+              <ProtectedRoute>
+                <AppLayout><SplitExpenses /></AppLayout>
+              </ProtectedRoute>
+            } />
             <Route path="/reports" element={
               <ProtectedRoute>
                 <AppLayout><Reports /></AppLayout>
@@ -103,6 +110,11 @@ export default function App() {
             <Route path="/ai" element={
               <ProtectedRoute>
                 <AppLayout><AIInsights /></AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/yearly" element={
+              <ProtectedRoute>
+                <AppLayout><YearlySummary /></AppLayout>
               </ProtectedRoute>
             } />
 

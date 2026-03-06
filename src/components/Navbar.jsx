@@ -12,7 +12,9 @@ const PAGE_TITLES = {
   '/budgets':      'Budgets',
   '/recurring':    'Recurring',
   '/goals':        'Savings Goals',
+  '/splits':       'Split Expenses',
   '/reports':      'Reports',
+  '/yearly':       'Yearly Summary',
   '/ai':           'AI Insights',
   '/profile':      'Profile',
 }

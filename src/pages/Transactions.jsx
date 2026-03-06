@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTransactions } from '../hooks/useTransactions'
 import { useAuth } from '../context/AuthContext'
 import TransactionList from '../components/TransactionList'
-import { HiPlus, HiSearch, HiFilter, HiUpload } from 'react-icons/hi'
+import { HiPlus, HiSearch, HiFilter, HiUpload, HiTag } from 'react-icons/hi'
 import { CATEGORIES } from '../utils/categories'
 import { toDateString } from '../utils/dateHelpers'
 import { formatCurrency } from '../utils/formatCurrency'
@@ -11,7 +11,7 @@ import { Timestamp } from 'firebase/firestore'
 import toast from 'react-hot-toast'
 
 export default function Transactions() {
-  const { transactions, loading, deleteTransaction, totalIncome, totalExpense, balance, addTransaction } = useTransactions()
+  const { transactions, loading, deleteTransaction, updateTransaction, totalIncome, totalExpense, balance, addTransaction } = useTransactions()
   const { profile } = useAuth()
   const currency = profile?.currency ?? 'BDT'
   const csvRef = useRef()
@@ -20,6 +20,7 @@ export default function Transactions() {
   const [typeFilter, setType]   = useState('all')
   const [catFilter, setCat]     = useState('all')
   const [monthFilter, setMonth] = useState('all')
+  const [tagFilter, setTagFilter] = useState('all')
   const [importing, setImporting] = useState(false)
 
   // Build unique month options
@@ -31,9 +32,16 @@ export default function Transactions() {
     return Array.from(set).sort().reverse()
   }, [transactions])
 
+  // Build unique tag options
+  const allTags = useMemo(() => {
+    const set = new Set(transactions.flatMap(t => t.tags ?? []))
+    return Array.from(set).sort()
+  }, [transactions])
+
   const filtered = useMemo(() => transactions.filter(t => {
     if (typeFilter !== 'all' && t.type !== typeFilter) return false
     if (catFilter  !== 'all' && t.category !== catFilter) return false
+    if (tagFilter  !== 'all' && !(t.tags ?? []).includes(tagFilter)) return false
     if (monthFilter !== 'all') {
       const d    = t.date?.toDate ? t.date.toDate() : new Date(t.date)
       const key  = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
@@ -44,7 +52,12 @@ export default function Transactions() {
       return t.title?.toLowerCase().includes(q) || t.category?.toLowerCase().includes(q) || t.notes?.toLowerCase().includes(q)
     }
     return true
-  }), [transactions, typeFilter, catFilter, monthFilter, search])
+  }), [transactions, typeFilter, catFilter, monthFilter, tagFilter, search])
+
+  async function handleTogglePin(id, pinned) {
+    await updateTransaction(id, { pinned })
+    toast.success(pinned ? 'Transaction pinned!' : 'Transaction unpinned')
+  }
 
   async function handleDelete(id) {
     if (!confirm('Delete this transaction?')) return
@@ -157,6 +170,14 @@ export default function Transactions() {
             <option value="all">All Months</option>
             {months.map(m => <option key={m} value={m}>{m}</option>)}
           </select>
+
+          {/* Tag filter */}
+          {allTags.length > 0 && (
+            <select className="input !w-auto text-xs py-2" value={tagFilter} onChange={e => setTagFilter(e.target.value)}>
+              <option value="all">All Tags</option>
+              {allTags.map(tag => <option key={tag} value={tag}>🏷️ {tag}</option>)}
+            </select>
+          )}
         </div>
       </div>
 
@@ -165,7 +186,7 @@ export default function Transactions() {
         <div className="flex items-center justify-between mb-3">
           <p className="text-sm text-gray-400">{filtered.length} transaction{filtered.length !== 1 ? 's' : ''}</p>
         </div>
-        <TransactionList transactions={filtered} onDelete={handleDelete} currency={currency} />
+        <TransactionList transactions={filtered} onDelete={handleDelete} onTogglePin={handleTogglePin} currency={currency} />
       </div>
     </div>
   )

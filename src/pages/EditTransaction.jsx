@@ -6,7 +6,7 @@ import { CATEGORIES } from '../utils/categories'
 import { Timestamp } from 'firebase/firestore'
 import { format } from 'date-fns'
 import toast from 'react-hot-toast'
-import { HiArrowLeft } from 'react-icons/hi'
+import { HiArrowLeft, HiTag, HiX } from 'react-icons/hi'
 
 export default function EditTransaction() {
   const { id } = useParams()
@@ -22,6 +22,8 @@ export default function EditTransaction() {
   const [category, setCat]  = useState('Food')
   const [date, setDate]     = useState(new Date().toISOString().slice(0, 10))
   const [notes, setNotes]   = useState('')
+  const [tags, setTags]     = useState([])
+  const [tagInput, setTagInput] = useState('')
   const [busy, setBusy]     = useState(false)
 
   useEffect(() => {
@@ -31,6 +33,7 @@ export default function EditTransaction() {
     setAmount(String(tx.amount ?? ''))
     setCat(tx.category ?? 'Food')
     setNotes(tx.notes ?? '')
+    setTags(tx.tags ?? [])
     const d = tx.date?.toDate ? tx.date.toDate() : new Date(tx.date)
     setDate(format(d, 'yyyy-MM-dd'))
   }, [tx])
@@ -52,6 +55,7 @@ export default function EditTransaction() {
         category,
         date:     Timestamp.fromDate(new Date(date)),
         notes:    notes.trim(),
+        tags: tags.length > 0 ? tags : [],
       })
       toast.success('Transaction updated!')
       navigate('/transactions')
@@ -140,6 +144,32 @@ export default function EditTransaction() {
           <label className="label">Notes (optional)</label>
           <textarea className="input resize-none" rows={2} placeholder="Any extra details…"
             value={notes} onChange={e => setNotes(e.target.value)} />
+        </div>
+
+        {/* Tags */}
+        <div>
+          <label className="label">Tags (optional)</label>
+          <div className="flex flex-wrap gap-1.5 mb-2">
+            {tags.map(tag => (
+              <span key={tag} className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 text-xs font-medium rounded-full border border-primary-200 dark:border-primary-700">
+                <HiTag className="w-2.5 h-2.5" />{tag}
+                <button type="button" onClick={() => setTags(tags.filter(t => t !== tag))} className="hover:text-red-500 transition">
+                  <HiX className="w-2.5 h-2.5" />
+                </button>
+              </span>
+            ))}
+          </div>
+          <input className="input" placeholder="Type a tag and press Enter"
+            value={tagInput}
+            onChange={e => setTagInput(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && tagInput.trim()) {
+                e.preventDefault()
+                const t = tagInput.trim().toLowerCase()
+                if (!tags.includes(t)) setTags([...tags, t])
+                setTagInput('')
+              }
+            }} />
         </div>
 
         {/* Existing receipt */}

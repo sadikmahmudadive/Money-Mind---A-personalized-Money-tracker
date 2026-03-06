@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
-import { HiTrash, HiExternalLink, HiPencil } from 'react-icons/hi'
+import { HiTrash, HiExternalLink, HiPencil, HiTag, HiStar } from 'react-icons/hi'
 import { getCategoryMeta } from '../utils/categories'
 import { toDateString } from '../utils/dateHelpers'
 import { formatCurrency } from '../utils/formatCurrency'
 
-export default function TransactionList({ transactions, onDelete, currency = 'BDT', limit }) {
+export default function TransactionList({ transactions, onDelete, onTogglePin, currency = 'BDT', limit }) {
   const items = limit ? transactions.slice(0, limit) : transactions
 
   if (!items.length) {
@@ -52,6 +52,15 @@ export default function TransactionList({ transactions, onDelete, currency = 'BD
                 <span>·</span>
                 <span>{toDateString(tx.date)}</span>
               </p>
+              {tx.tags?.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {tx.tags.map(tag => (
+                    <span key={tag} className="inline-flex items-center gap-0.5 px-1.5 py-0 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-[10px] font-medium rounded-full">
+                      <HiTag className="w-2 h-2" />{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Amount + actions row */}
@@ -68,6 +77,15 @@ export default function TransactionList({ transactions, onDelete, currency = 'BD
 
               {/* Action buttons — visible on hover (desktop) or always visible (mobile) */}
               <div className="flex items-center gap-0.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-150">
+                {onTogglePin && (
+                  <button
+                    onClick={() => onTogglePin(tx.id, !tx.pinned)}
+                    className={`btn-icon ${tx.pinned ? 'text-amber-500' : 'text-gray-300 dark:text-gray-600 hover:text-amber-400'}`}
+                    title={tx.pinned ? 'Unpin' : 'Pin'}
+                  >
+                    <HiStar className="w-3.5 h-3.5" />
+                  </button>
+                )}
                 {tx.receiptURL && (
                   <a
                     href={tx.receiptURL}

@@ -7,7 +7,10 @@ import { uploadToCloudinary } from '../cloudinary'
 import { suggestCategory } from '../utils/ai'
 import { Timestamp } from 'firebase/firestore'
 import toast from 'react-hot-toast'
-import { HiX, HiPhotograph, HiSparkles } from 'react-icons/hi'
+import { HiX, HiPhotograph, HiSparkles, HiSwitchHorizontal, HiTag, HiCamera } from 'react-icons/hi'
+import { CURRENCIES } from '../utils/formatCurrency'
+import { convertCurrency, getRate } from '../utils/exchangeRates'
+import { extractReceiptData } from '../utils/receiptOCR'
 
 export default function AddTransaction() {
   const navigate = useNavigate()
@@ -20,13 +23,35 @@ export default function AddTransaction() {
   const [category, setCat]    = useState('Food')
   const [date, setDate]       = useState(new Date().toISOString().slice(0, 10))
   const [notes, setNotes]     = useState('')
+  const [txCurrency, setTxCurrency] = useState(profile?.currency ?? 'BDT')
+  const [convertedAmt, setConverted] = useState(null)
+  const [tags, setTags]               = useState([])
+  const [tagInput, setTagInput]       = useState('')
   const [receipt, setReceipt]       = useState(null)
   const [preview, setPreview]         = useState(null)
   const [busy, setBusy]               = useState(false)
   const [aiSuggesting, setAiSugg]     = useState(false)
   const [aiSuggestion, setAiSuggestion] = useState(null)
+  const [ocrBusy, setOcrBusy]             = useState(false)
   const fileRef                         = useRef()
   const titleTimer                      = useRef(null)
+
+  // Live currency conversion preview
+  const baseCurrency = profile?.currency ?? 'BDT'
+  const showConversion = txCurrency !== baseCurrency && amount && Number(amount) > 0
+  useState(() => {
+    if (showConversion) {
+      convertCurrency(Number(amount), txCurrency, baseCurrency).then(setConverted).catch(() => {})
+    } else {
+      setConverted(null)
+    }
+  })
+  // Update conversion when amount or txCurrency changes
+  const updateConversion = async (amt, cur) => {
+    if (cur !== baseCurrency && amt && Number(amt) > 0) {
+      try { setConverted(await convertCurrency(Number(amt), cur, baseCurrency)) } catch { setConverted(null) }
+    } else { setConverted(null) }
+  }
 
   // Debounced AI category suggestion on title change
   async function handleTitleChange(e) {
@@ -76,14 +101,23 @@ export default function AddTransaction() {
         toast.dismiss('upload')
       }
 
+      // Convert to base currency if needed
+      let finalAmount = Number(amount)
+      if (txCurrency !== baseCurrency) {
+        finalAmount = await convertCurrency(Number(amount), txCurrency, baseCurrency)
+      }
+
       await addTransaction({
         type,
         title:      title.trim() || category,
-        amount:     Number(amount),
+        amount:     Math.round(finalAmount * 100) / 100,
         category,
         date:       Timestamp.fromDate(new Date(date)),
         notes:      notes.trim(),
         receiptURL,
+        originalCurrency: txCurrency !== baseCurrency ? txCurrency : null,
+        originalAmount:   txCurrency !== baseCurrency ? Number(amount) : null,
+        tags: tags.length > 0 ? tags : [],
       })
       toast.success('Transaction added!')
       navigate('/transactions')
@@ -135,11 +169,23 @@ export default function AddTransaction() {
           )}
         </div>
 
-        {/* Amount */}
+        {/* Amount + Currency */}
         <div>
-          <label className="label">Amount ({profile?.currency ?? 'BDT'})</label>
-          <input className="input" type="number" min="0.01" step="0.01" placeholder="0.00"
-            value={amount} onChange={e => setAmount(e.target.value)} required />
+          <label className="label">Amount</label>
+          <div className="flex gap-2">
+            <select className="input !w-24 shrink-0" value={txCurrency}
+              onChange={e => { setTxCurrency(e.target.value); updateConversion(amount, e.target.value) }}>
+              {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+            <input className="input" type="number" min="0.01" step="0.01" placeholder="0.00"
+              value={amount} onChange={e => { setAmount(e.target.value); updateConversion(e.target.value, txCurrency) }} required />
+          </div>
+          {showConversion && convertedAmt !== null && (
+            <p className="flex items-center gap-1.5 text-xs text-primary-500 mt-1.5">
+              <HiSwitchHorizontal className="w-3 h-3" />
+              ≈ {formatCurrency(convertedAmt, baseCurrency)} ({baseCurrency})
+            </p>
+          )}
         </div>
 
         {/* Category */}
@@ -175,10 +221,37 @@ export default function AddTransaction() {
             value={notes} onChange={e => setNotes(e.target.value)} />
         </div>
 
+        {/* Tags */}
+        <div>
+          <label className="label">Tags (optional)</label>
+          <div className="flex flex-wrap gap-1.5 mb-2">
+            {tags.map(tag => (
+              <span key={tag} className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 text-xs font-medium rounded-full border border-primary-200 dark:border-primary-700">
+                <HiTag className="w-2.5 h-2.5" />{tag}
+                <button type="button" onClick={() => setTags(tags.filter(t => t !== tag))} className="hover:text-red-500 transition">
+                  <HiX className="w-2.5 h-2.5" />
+                </button>
+              </span>
+            ))}
+          </div>
+          <input className="input" placeholder="Type a tag and press Enter (e.g. travel, work)"
+            value={tagInput}
+            onChange={e => setTagInput(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && tagInput.trim()) {
+                e.preventDefault()
+                const t = tagInput.trim().toLowerCase()
+                if (!tags.includes(t)) setTags([...tags, t])
+                setTagInput('')
+              }
+            }} />
+        </div>
+
         {/* Receipt upload */}
         <div>
           <label className="label">Receipt / Bill Image (optional)</label>
           {preview ? (
+            <>
             <div className="relative w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
               <img src={preview} alt="receipt" className="w-full max-h-48 object-contain bg-gray-50 dark:bg-gray-800" />
               <button type="button" onClick={removeReceipt}
@@ -186,6 +259,32 @@ export default function AddTransaction() {
                 <HiX className="w-4 h-4" />
               </button>
             </div>
+            <button type="button" disabled={ocrBusy}
+              onClick={async () => {
+                if (!receipt) return
+                setOcrBusy(true)
+                try {
+                  const data = await extractReceiptData(receipt)
+                  if (data.title) setTitle(data.title)
+                  if (data.amount > 0) setAmount(String(data.amount))
+                  if (data.category) {
+                    const match = cats.find(c => c.name.toLowerCase() === data.category.toLowerCase())
+                    if (match) setCat(match.name)
+                  }
+                  if (data.date) setDate(data.date)
+                  if (data.notes) setNotes(data.notes)
+                  toast.success('Receipt data extracted!')
+                } catch (err) {
+                  toast.error(err.message ?? 'Could not extract receipt data')
+                } finally {
+                  setOcrBusy(false)
+                }
+              }}
+              className="mt-2 w-full flex items-center justify-center gap-2 px-3 py-2 border border-primary-300 dark:border-primary-700 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 text-sm font-semibold rounded-xl hover:bg-primary-100 dark:hover:bg-primary-900/40 transition disabled:opacity-50">
+              <HiCamera className="w-4 h-4" />
+              {ocrBusy ? 'Extracting…' : 'Extract from Receipt (AI)'}
+            </button>
+            </>
           ) : (
             <button type="button" onClick={() => fileRef.current.click()}
               className="w-full border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl py-6 flex flex-col items-center gap-2 text-gray-400 hover:border-primary-400 hover:text-primary-500 transition">
