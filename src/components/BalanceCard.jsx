@@ -6,7 +6,7 @@ export default function BalanceCard({ balance, totalIncome, totalExpense, curren
   const positiveBalance = balance >= 0
 
   return (
-    <div className="relative overflow-hidden rounded-2xl p-6 border-0 text-white"
+    <div className="relative overflow-hidden rounded-2xl p-4 sm:p-6 border-0 text-white"
       style={{
         background: 'linear-gradient(135deg, #0ea5e9 0%, #7c3aed 60%, #0ea5e9 100%)',
         backgroundSize: '200% 200%',
@@ -23,7 +23,7 @@ export default function BalanceCard({ balance, totalIncome, totalExpense, curren
         </p>
 
         {/* Balance */}
-        <p className="text-4xl font-extrabold tracking-tight leading-none mb-1">
+        <p className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-none mb-1">
           {formatCurrency(balance, currency)}
         </p>
 

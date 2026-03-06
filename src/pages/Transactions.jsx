@@ -94,15 +94,16 @@ export default function Transactions() {
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-extrabold">Transactions</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <h1 className="text-xl sm:text-2xl font-extrabold">Transactions</h1>
         <div className="flex items-center gap-2">
           <button
             onClick={() => csvRef.current.click()}
             disabled={importing}
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition disabled:opacity-50">
             <HiUpload className="w-4 h-4" />
-            {importing ? 'Importing…' : 'Import CSV'}
+            <span className="hidden sm:inline">{importing ? 'Importing…' : 'Import CSV'}</span>
+            <span className="sm:hidden">{importing ? '…' : 'CSV'}</span>
           </button>
           <input ref={csvRef} type="file" accept=".csv" className="hidden" onChange={handleCSVImport} />
           <Link to="/add" className="btn-primary flex items-center gap-2 text-sm">
@@ -112,7 +113,7 @@ export default function Transactions() {
       </div>
 
       {/* Summary pills */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         {[
           { label: 'Balance',  value: balance,       color: 'text-primary-600 dark:text-primary-400', bg: 'from-primary-50 to-blue-50 dark:from-primary-900/10 dark:to-blue-900/10', border: 'border-primary-100 dark:border-primary-800/30' },
           { label: 'Income',   value: totalIncome,   color: 'text-emerald-600 dark:text-emerald-400', bg: 'from-emerald-50 to-green-50 dark:from-emerald-900/10 dark:to-green-900/10', border: 'border-emerald-100 dark:border-emerald-800/30' },

@@ -64,8 +64,8 @@ export default function TransactionList({ transactions, onDelete, currency = 'BD
               {isIncome ? '+' : '-'}{formatCurrency(tx.amount, currency)}
             </div>
 
-            {/* Action buttons — visible on hover */}
-            <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 shrink-0">
+            {/* Action buttons — visible on hover (desktop) or always visible (mobile) */}
+            <div className="flex items-center gap-0.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-150 shrink-0">
               {tx.receiptURL && (
                 <a
                   href={tx.receiptURL}

@@ -104,11 +104,11 @@ export default function Auth() {
           {dark ? <HiSun className="w-5 h-5 text-amber-400" /> : <HiMoon className="w-5 h-5" />}
         </button>
 
-        <div className="w-full max-w-sm animate-scaleIn">
+        <div className="w-full max-w-sm px-2 sm:px-0 animate-scaleIn">
 
           {/* Header */}
           <div className="text-center mb-8">
-            <span className="text-5xl">💰</span>
+            <span className="text-4xl sm:text-5xl">💰</span>
             <h2 className="text-2xl font-extrabold mt-3 text-gray-900 dark:text-white">
               {isRegister ? 'Create your account' : 'Welcome back'}
             </h2>

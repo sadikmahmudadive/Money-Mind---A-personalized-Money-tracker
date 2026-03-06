@@ -61,13 +61,13 @@ export default function Profile() {
 
         {/* Avatar + info */}
         <div className="bg-white dark:bg-gray-900 px-6 pb-5 relative">
-          <div className="flex items-end gap-4 -mt-12 mb-4">
+          <div className="flex items-end gap-3 sm:gap-4 -mt-12 mb-4">
             <div className="relative shrink-0">
               {preview
                 ? <img src={preview} alt="avatar"
-                    className="w-20 h-20 rounded-2xl object-cover ring-4 ring-white dark:ring-gray-900 shadow-lg" />
-                : <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-400 to-purple-600
-                                  text-white text-3xl font-bold flex items-center justify-center
+                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover ring-4 ring-white dark:ring-gray-900 shadow-lg" />
+                : <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-primary-400 to-purple-600
+                                  text-white text-2xl sm:text-3xl font-bold flex items-center justify-center
                                   ring-4 ring-white dark:ring-gray-900 shadow-lg">
                     {initials}
                   </div>

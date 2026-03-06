@@ -65,9 +65,9 @@ export default function BudgetManager() {
 
   return (
     <div className="space-y-6 animate-fadeIn">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-extrabold">Budget Manager</h1>
+          <h1 className="text-xl sm:text-2xl font-extrabold">Budget Manager</h1>
           <p className="text-sm text-gray-400 mt-0.5">Set monthly spending limits per category</p>
         </div>
         {availableCats.length > 0 && (
@@ -88,7 +88,7 @@ export default function BudgetManager() {
           <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
           <p className="text-xs font-bold uppercase tracking-widest text-white/70 mb-1">Monthly Overview</p>
           <div className="flex items-end justify-between mb-3">
-            <p className="text-3xl font-extrabold">{formatCurrency(totalSpent, currency)}</p>
+            <p className="text-2xl sm:text-3xl font-extrabold">{formatCurrency(totalSpent, currency)}</p>
             <p className="text-white/70 text-sm">of {formatCurrency(totalLimit, currency)}</p>
           </div>
           <div className="h-2 bg-white/20 rounded-full overflow-hidden">

@@ -154,9 +154,9 @@ export default function SavingsGoals() {
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-extrabold">Savings Goals</h1>
+          <h1 className="text-xl sm:text-2xl font-extrabold">Savings Goals</h1>
           <p className="text-sm text-gray-400 mt-0.5">Track your financial milestones</p>
         </div>
         <button onClick={() => setShowAdd(true)}
@@ -167,7 +167,7 @@ export default function SavingsGoals() {
 
       {/* Stats row */}
       {goals.length > 0 && (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           {[
             { label: 'Total Saved',  value: formatCurrency(totalSaved, currency),  color: 'text-emerald-600 dark:text-emerald-400', bg: 'from-emerald-50 to-teal-50 dark:from-emerald-900/10 dark:to-teal-900/10', border: 'border-emerald-100 dark:border-emerald-800/30' },
             { label: 'Total Target', value: formatCurrency(totalTarget, currency), color: 'text-primary-600 dark:text-primary-400', bg: 'from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10',     border: 'border-blue-100 dark:border-blue-800/30' },

@@ -129,7 +129,7 @@ export default function AIInsights() {
           <HiSparkles className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-extrabold">AI Insights</h1>
+          <h1 className="text-xl sm:text-2xl font-extrabold">AI Insights</h1>
           <p className="text-sm text-gray-400">Powered by Groq · Llama 3.3 70B</p>
         </div>
       </div>
@@ -151,7 +151,7 @@ export default function AIInsights() {
       )}
 
       {/* Stats bar */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="card text-center py-3">
           <p className="text-2xl font-extrabold text-primary-500">{thisMonthTx.length}</p>
           <p className="text-xs text-gray-400 mt-0.5">Transactions this month</p>
@@ -214,7 +214,7 @@ export default function AIInsights() {
             setLoadingTab(null)
             toast.success('All AI insights generated!')
           }}
-          className="flex items-center gap-2 bg-gradient-to-r from-primary-500 to-purple-600 hover:from-primary-600 hover:to-purple-700 text-white font-semibold px-8 py-3 rounded-xl transition disabled:opacity-50 shadow-lg active:scale-95"
+          className="flex items-center gap-2 bg-gradient-to-r from-primary-500 to-purple-600 hover:from-primary-600 hover:to-purple-700 text-white font-semibold px-6 sm:px-8 py-3 rounded-xl transition disabled:opacity-50 shadow-lg active:scale-95 text-sm sm:text-base"
         >
           <HiSparkles className="w-4 h-4" />
           {loadingTab ? 'Generating…' : 'Generate All Insights'}

@@ -79,9 +79,9 @@ export default function Recurring() {
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-extrabold">Recurring</h1>
+          <h1 className="text-xl sm:text-2xl font-extrabold">Recurring</h1>
           <p className="text-sm text-gray-400 mt-0.5">Monthly bills &amp; salary, auto-added each month</p>
         </div>
         <div className="flex gap-2">
@@ -204,7 +204,7 @@ export default function Recurring() {
             const cat = getCategoryMeta(r.category)
             return (
               <div key={r.id}
-                className={`card flex items-center gap-4 transition-all ${!r.active ? 'opacity-50' : ''}`}>
+                className={`card flex items-center gap-3 sm:gap-4 transition-all ${!r.active ? 'opacity-50' : ''}`}>
                 <div className="w-11 h-11 rounded-full flex items-center justify-center text-xl shrink-0"
                   style={{ background: cat.color + '22' }}>
                   {cat.icon}
@@ -214,8 +214,11 @@ export default function Recurring() {
                   <p className="text-xs text-gray-400">
                     {cat.name} · Due {ordinal(r.dueDay ?? 1)} monthly
                   </p>
+                  <p className={`sm:hidden font-bold text-xs mt-0.5 ${r.type === 'income' ? 'text-emerald-500' : 'text-red-500'}`}>
+                    {r.type === 'income' ? '+' : '-'}{formatCurrency(r.amount, currency)}
+                  </p>
                 </div>
-                <div className="text-right shrink-0">
+                <div className="text-right shrink-0 hidden sm:block">
                   <p className={`font-bold text-sm ${r.type === 'income' ? 'text-emerald-500' : 'text-red-500'}`}>
                     {r.type === 'income' ? '+' : '-'}{formatCurrency(r.amount, currency)}
                   </p>

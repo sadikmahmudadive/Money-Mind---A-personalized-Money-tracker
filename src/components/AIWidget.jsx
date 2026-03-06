@@ -28,8 +28,8 @@ export default function AIWidget({ transactions, currency = 'BDT' }) {
 
   return (
     <div className="card border border-primary-100 dark:border-primary-800/40 bg-gradient-to-br from-white to-primary-50/30 dark:from-gray-900 dark:to-primary-900/10">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+        <div className="flex items-center gap-2 flex-wrap">
           <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
             <HiSparkles className="w-3.5 h-3.5 text-white" />
           </div>

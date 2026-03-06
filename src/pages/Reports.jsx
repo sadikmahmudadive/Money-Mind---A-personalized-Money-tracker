@@ -122,7 +122,7 @@ export default function Reports() {
   return (
     <div className="space-y-6 animate-fadeIn">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-extrabold">Reports</h1>
+        <h1 className="text-xl sm:text-2xl font-extrabold">Reports</h1>
         <div className="flex gap-2">
           <button onClick={() => handleExport('csv')} disabled={exporting}
             className="btn-secondary text-sm disabled:opacity-60">📥 CSV</button>
@@ -143,7 +143,7 @@ export default function Reports() {
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         {[
           { label: 'Total Income',   val: formatCurrency(totalIncome,  currency), color: 'text-emerald-600 dark:text-emerald-400', bg: 'from-emerald-50 to-teal-50 dark:from-emerald-900/10 dark:to-teal-900/10', border: 'border-emerald-100 dark:border-emerald-800/30' },
           { label: 'Total Expenses', val: formatCurrency(totalExpense, currency), color: 'text-red-600 dark:text-red-400',         bg: 'from-red-50 to-rose-50 dark:from-red-900/10 dark:to-rose-900/10',         border: 'border-red-100 dark:border-red-800/30' },

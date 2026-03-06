@@ -36,14 +36,14 @@ export default function Landing() {
             <button onClick={toggle} className="btn-icon" title={dark ? 'Light mode' : 'Dark mode'}>
               {dark ? <HiSun className="w-5 h-5 text-amber-400" /> : <HiMoon className="w-5 h-5" />}
             </button>
-            <Link to="/auth" className="btn-secondary text-sm">Login</Link>
-            <Link to="/auth?mode=register" className="btn-primary text-sm">Get Started</Link>
+            <Link to="/auth" className="btn-secondary text-xs sm:text-sm">Login</Link>
+            <Link to="/auth?mode=register" className="btn-primary text-xs sm:text-sm">Get Started</Link>
           </div>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="relative flex-1 flex flex-col items-center justify-center text-center px-4 py-28 overflow-hidden">
+      <section className="relative flex-1 flex flex-col items-center justify-center text-center px-4 py-16 sm:py-28 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-200/40 dark:bg-primary-800/20 rounded-full filter blur-3xl" />
           <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-purple-200/40 dark:bg-purple-800/20 rounded-full filter blur-3xl" />
@@ -53,11 +53,11 @@ export default function Landing() {
           <div className="inline-flex items-center gap-2 bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-400 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-widest">
             🚀 Smart Personal Finance for Bangladesh
           </div>
-          <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white leading-tight mb-6 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white leading-tight mb-6 tracking-tight">
             Take Control of<br />
             <span className="gradient-text">Your Money</span>
           </h1>
-          <p className="text-lg text-gray-500 dark:text-gray-400 mb-10 max-w-2xl mx-auto text-balance leading-relaxed">
+          <p className="text-base sm:text-lg text-gray-500 dark:text-gray-400 mb-10 max-w-2xl mx-auto text-balance leading-relaxed">
             Log income &amp; expenses in ৳ BDT, upload receipts, set budgets,
             and get AI-powered insights — all in one beautiful dashboard.
           </p>
@@ -72,19 +72,19 @@ export default function Landing() {
         </div>
 
         {/* Mock dashboard preview */}
-        <div className="relative mt-20 max-w-4xl w-full mx-auto rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700 animate-slideUp">
+        <div className="relative mt-12 sm:mt-20 max-w-4xl w-full mx-auto rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700 animate-slideUp">
           <div className="bg-gray-800 dark:bg-gray-950 px-4 py-2.5 flex items-center gap-2">
             <span className="w-3 h-3 rounded-full bg-red-400" />
             <span className="w-3 h-3 rounded-full bg-yellow-400" />
             <span className="w-3 h-3 rounded-full bg-green-400" />
             <span className="flex-1 text-center text-gray-500 text-xs font-mono">moneymind.app/dashboard</span>
           </div>
-          <div className="bg-white dark:bg-gray-900 p-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="sm:col-span-3 rounded-xl text-white p-5"
+          <div className="bg-white dark:bg-gray-900 p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+            <div className="sm:col-span-3 rounded-xl text-white p-4 sm:p-5"
               style={{ background: 'linear-gradient(135deg,#0ea5e9,#7c3aed)' }}
             >
               <p className="text-white/60 text-xs mb-1 uppercase tracking-widest font-semibold">Current Balance (BDT)</p>
-              <p className="text-4xl font-extrabold">৳42,350.00</p>
+              <p className="text-2xl sm:text-4xl font-extrabold">৳42,350.00</p>
               <div className="mt-4 grid grid-cols-2 gap-3">
                 <div className="bg-white/10 rounded-xl p-3">
                   <p className="text-emerald-200 text-[11px] font-bold uppercase tracking-wide mb-1">↑ Income</p>
@@ -110,7 +110,7 @@ export default function Landing() {
         <div className="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
           {stats.map(s => (
             <div key={s.label}>
-              <p className="text-4xl font-extrabold">{s.value}</p>
+              <p className="text-2xl sm:text-4xl font-extrabold">{s.value}</p>
               <p className="text-white/70 text-sm mt-1">{s.label}</p>
             </div>
           ))}
@@ -118,10 +118,10 @@ export default function Landing() {
       </section>
 
       {/* Features */}
-      <section className="py-24 px-4 bg-white dark:bg-gray-900">
+      <section className="py-16 sm:py-24 px-4 bg-white dark:bg-gray-900">
         <div className="max-w-5xl mx-auto">
           <p className="text-center text-xs font-bold uppercase tracking-widest text-primary-500 mb-3">Features</p>
-          <h2 className="text-3xl font-extrabold text-center mb-3 text-gray-900 dark:text-white">Everything you need</h2>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-center mb-3 text-gray-900 dark:text-white">Everything you need</h2>
           <p className="text-center text-gray-500 dark:text-gray-400 mb-12">
             Powerful features wrapped in a delightful interface
           </p>
@@ -142,9 +142,9 @@ export default function Landing() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 px-4 bg-gradient-to-br from-primary-600 to-purple-600 text-white text-center">
-        <h2 className="text-4xl font-extrabold mb-4 tracking-tight">Ready to master your money?</h2>
-        <p className="text-white/70 mb-8 text-lg">Join thousands of Bangladeshis tracking smarter.</p>
+      <section className="py-16 sm:py-24 px-4 bg-gradient-to-br from-primary-600 to-purple-600 text-white text-center">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-4 tracking-tight">Ready to master your money?</h2>
+        <p className="text-white/70 mb-8 text-base sm:text-lg">Join thousands of Bangladeshis tracking smarter.</p>
         <Link
           to="/auth?mode=register"
           className="inline-block bg-white text-primary-700 font-bold px-10 py-4 rounded-xl hover:bg-primary-50 transition-all active:scale-95 shadow-lg text-lg"

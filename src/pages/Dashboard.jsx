@@ -84,12 +84,12 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-0.5">
             {format(new Date(), 'EEEE, MMMM d')}
           </p>
-          <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">
+          <h1 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white">
             {getGreeting()}, {profile?.name?.split(' ')[0] ?? 'there'} 👋
           </h1>
           <p className="text-sm text-gray-400 mt-0.5">
