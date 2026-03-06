@@ -22,6 +22,7 @@ import Recurring      from './pages/Recurring'
 import SavingsGoals   from './pages/SavingsGoals'
 import SplitExpenses  from './pages/SplitExpenses'
 import YearlySummary  from './pages/YearlySummary'
+import CurrencyConverter from './pages/CurrencyConverter'
 
 function AppLayout({ children }) {
   const [sideOpen, setSideOpen] = useState(false)
@@ -115,6 +116,11 @@ export default function App() {
             <Route path="/yearly" element={
               <ProtectedRoute>
                 <AppLayout><YearlySummary /></AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/converter" element={
+              <ProtectedRoute>
+                <AppLayout><CurrencyConverter /></AppLayout>
               </ProtectedRoute>
             } />
 

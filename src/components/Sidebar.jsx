@@ -2,7 +2,7 @@ import { NavLink, Link } from 'react-router-dom'
 import {
   HiViewGrid, HiCash, HiPlusCircle, HiChartPie,
   HiDocumentReport, HiUser, HiX, HiSparkles, HiRefresh, HiFlag,
-  HiUserGroup, HiCalendar,
+  HiUserGroup, HiCalendar, HiCurrencyDollar,
 } from 'react-icons/hi'
 
 const sections = [
@@ -21,6 +21,7 @@ const sections = [
       { to: '/recurring', icon: <HiRefresh className="w-4.5 h-4.5" />,        label: 'Recurring'    },
       { to: '/goals',     icon: <HiFlag className="w-4.5 h-4.5" />,           label: 'Savings Goals'},
       { to: '/splits',    icon: <HiUserGroup className="w-4.5 h-4.5" />,      label: 'Split Expenses'},
+      { to: '/converter', icon: <HiCurrencyDollar className="w-4.5 h-4.5" />, label: 'Currency Converter'},
     ],
   },
   {
