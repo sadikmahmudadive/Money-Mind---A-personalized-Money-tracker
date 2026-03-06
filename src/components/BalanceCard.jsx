@@ -43,13 +43,13 @@ export default function BalanceCard({ balance, totalIncome, totalExpense, curren
             <div className="flex items-center gap-1.5 text-emerald-300 text-[11px] font-bold uppercase tracking-wide mb-1.5">
               <HiArrowSmUp className="w-4 h-4" /> Income
             </div>
-            <p className="text-base font-extrabold">{formatCurrency(totalIncome, currency)}</p>
+            <p className="text-sm sm:text-base font-extrabold truncate">{formatCurrency(totalIncome, currency)}</p>
           </div>
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/10">
             <div className="flex items-center gap-1.5 text-red-300 text-[11px] font-bold uppercase tracking-wide mb-1.5">
               <HiArrowSmDown className="w-4 h-4" /> Expenses
             </div>
-            <p className="text-base font-extrabold">{formatCurrency(totalExpense, currency)}</p>
+            <p className="text-sm sm:text-base font-extrabold truncate">{formatCurrency(totalExpense, currency)}</p>
           </div>
         </div>
       </div>

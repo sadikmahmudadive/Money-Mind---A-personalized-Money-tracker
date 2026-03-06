@@ -114,9 +114,9 @@ export default function Dashboard() {
           {overBudget.map(b => {
             const pct = Math.round((b.spent / b.limit) * 100)
             return (
-              <div key={b.category} className="flex items-center justify-between text-xs">
-                <span className="text-red-600 dark:text-red-400 font-medium">{b.category}</span>
-                <span className={`font-bold ${pct >= 100 ? 'text-red-600' : 'text-amber-600'}`}>
+              <div key={b.category} className="flex items-center justify-between gap-2 text-xs">
+                <span className="text-red-600 dark:text-red-400 font-medium truncate">{b.category}</span>
+                <span className={`font-bold shrink-0 ${pct >= 100 ? 'text-red-600' : 'text-amber-600'}`}>
                   {formatCurrency(b.spent, currency)} / {formatCurrency(b.limit, currency)} ({pct}%)
                 </span>
               </div>

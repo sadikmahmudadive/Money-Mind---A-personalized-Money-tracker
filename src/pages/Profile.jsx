@@ -139,7 +139,7 @@ export default function Profile() {
         ].map(row => (
           <div key={row.label} className="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-800 last:border-0">
             <span className="text-xs text-gray-400 font-medium">{row.label}</span>
-            <span className={`text-xs font-semibold text-gray-700 dark:text-gray-300 truncate max-w-[200px] ${
+            <span className={`text-xs font-semibold text-gray-700 dark:text-gray-300 truncate max-w-[180px] sm:max-w-[200px] ${
               row.mono ? 'font-mono text-gray-500' : ''
             }`}>{row.value}</span>
           </div>

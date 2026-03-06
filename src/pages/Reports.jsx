@@ -152,7 +152,7 @@ export default function Reports() {
         ].map(s => (
           <div key={s.label} className={`rounded-2xl bg-gradient-to-br ${s.bg} border ${s.border} p-4 text-center`}>
             <p className="text-xs text-gray-400 mb-1 font-medium">{s.label}</p>
-            <p className={`font-extrabold text-lg ${s.color}`}>{s.val}</p>
+            <p className={`font-extrabold text-base sm:text-lg truncate ${s.color}`}>{s.val}</p>
           </div>
         ))}
       </div>
@@ -160,11 +160,11 @@ export default function Reports() {
       {/* Line chart */}
       <div className="card">
         <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-4">Income vs Expenses Trend</h3>
-        <ResponsiveContainer width="100%" height={220}>
+        <ResponsiveContainer width="100%" height={200}>
           <LineChart data={lineData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-            <YAxis tick={{ fontSize: 12 }} />
+            <XAxis dataKey="name" tick={{ fontSize: 11 }} interval={0} />
+            <YAxis tick={{ fontSize: 11 }} width={45} />
             <Tooltip contentStyle={{ borderRadius: 12, fontSize: 12 }} />
             <Legend iconType="circle" iconSize={8} />
             <Line type="monotone" dataKey="Income"   stroke="#10b981" strokeWidth={2} dot={{ r:3 }} />
@@ -187,10 +187,10 @@ export default function Reports() {
                 const pct = totalExpense > 0 ? (amt / totalExpense) * 100 : 0
                 return (
                   <li key={cat} className="flex items-center gap-2 text-sm">
-                    <span>{icon}</span>
-                    <span className="flex-1 truncate">{cat}</span>
-                    <span className="text-gray-400 text-xs">{pct.toFixed(1)}%</span>
-                    <span className="font-semibold">{formatCurrency(amt, currency)}</span>
+                    <span className="shrink-0">{icon}</span>
+                    <span className="flex-1 truncate min-w-0">{cat}</span>
+                    <span className="text-gray-400 text-xs shrink-0">{pct.toFixed(1)}%</span>
+                    <span className="font-semibold shrink-0 text-xs sm:text-sm">{formatCurrency(amt, currency)}</span>
                   </li>
                 )
               })}

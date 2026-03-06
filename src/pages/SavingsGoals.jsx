@@ -62,7 +62,7 @@ function GoalCard({ goal, currency, onDelete, onContribute }) {
       </div>
 
       {/* Deadline + contribute */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           {goal.deadline && (
             <p className={`text-xs font-medium ${daysLeft != null && daysLeft < 30 ? 'text-amber-500' : 'text-gray-400'}`}>
@@ -175,7 +175,7 @@ export default function SavingsGoals() {
           ].map(s => (
             <div key={s.label} className={`rounded-2xl bg-gradient-to-br ${s.bg} border ${s.border} p-4 text-center`}>
               <p className="text-xs text-gray-400 mb-1 font-medium">{s.label}</p>
-              <p className={`font-extrabold text-base ${s.color}`}>{s.value}</p>
+              <p className={`font-extrabold text-sm sm:text-base truncate ${s.color}`}>{s.value}</p>
             </div>
           ))}
         </div>

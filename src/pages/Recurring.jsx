@@ -226,10 +226,10 @@ export default function Recurring() {
                     {r.lastApplied ? `Applied ${r.lastApplied}` : 'Not yet applied'}
                   </p>
                 </div>
-                <div className="flex items-center gap-1 shrink-0">
+                <div className="flex items-center gap-1.5 shrink-0">
                   <button
                     onClick={() => toggleActive(r.id, !r.active)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition
+                    className={`px-2 sm:px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-semibold transition
                       ${r.active
                         ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 hover:bg-emerald-200'
                         : 'bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200'

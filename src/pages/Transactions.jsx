@@ -121,7 +121,7 @@ export default function Transactions() {
         ].map(s => (
           <div key={s.label} className={`rounded-2xl bg-gradient-to-br ${s.bg} border ${s.border} p-4 text-center`}>
             <p className="text-xs text-gray-400 mb-1 font-medium">{s.label}</p>
-            <p className={`font-extrabold text-lg ${s.color}`}>{formatCurrency(s.value, currency)}</p>
+            <p className={`font-extrabold text-base sm:text-lg truncate ${s.color}`}>{formatCurrency(s.value, currency)}</p>
           </div>
         ))}
       </div>
@@ -147,13 +147,13 @@ export default function Transactions() {
           ))}
 
           {/* Category */}
-          <select className="input !w-auto text-xs py-1.5" value={catFilter} onChange={e => setCat(e.target.value)}>
+          <select className="input !w-auto text-xs py-2" value={catFilter} onChange={e => setCat(e.target.value)}>
             <option value="all">All Categories</option>
             {CATEGORIES.map(c => <option key={c.name} value={c.name}>{c.icon} {c.name}</option>)}
           </select>
 
           {/* Month */}
-          <select className="input !w-auto text-xs py-1.5" value={monthFilter} onChange={e => setMonth(e.target.value)}>
+          <select className="input !w-auto text-xs py-2" value={monthFilter} onChange={e => setMonth(e.target.value)}>
             <option value="all">All Months</option>
             {months.map(m => <option key={m} value={m}>{m}</option>)}
           </select>

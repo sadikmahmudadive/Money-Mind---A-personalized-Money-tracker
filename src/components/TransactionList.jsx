@@ -55,7 +55,7 @@ export default function TransactionList({ transactions, onDelete, currency = 'BD
             </div>
 
             {/* Amount badge */}
-            <div className={`shrink-0 px-3 py-1 rounded-full text-sm font-bold
+            <div className={`shrink-0 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold
               ${ isIncome
                 ? 'bg-emerald-50 dark:bg-emerald-900/25 text-emerald-600 dark:text-emerald-400'
                 : 'bg-red-50 dark:bg-red-900/25 text-red-600 dark:text-red-400'

@@ -59,7 +59,7 @@ export default function BudgetCard({ category, limit, spent = 0, currency = 'BDT
           {onDelete && (
             <button
               onClick={() => onDelete(category)}
-              className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-100 dark:hover:bg-red-900/30
+              className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 p-1.5 hover:bg-red-100 dark:hover:bg-red-900/30
                          text-red-400 hover:text-red-600 rounded-lg transition"
               title="Remove budget"
             >

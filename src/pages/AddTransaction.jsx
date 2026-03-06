@@ -96,7 +96,7 @@ export default function AddTransaction() {
 
   return (
     <div className="max-w-lg mx-auto animate-fadeIn">
-      <h1 className="text-2xl font-extrabold mb-6">Add Transaction</h1>
+      <h1 className="text-xl sm:text-2xl font-extrabold mb-6">Add Transaction</h1>
 
       {/* Type toggle */}
       <div className="flex rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 mb-6">

@@ -147,7 +147,7 @@ export default function Landing() {
         <p className="text-white/70 mb-8 text-base sm:text-lg">Join thousands of Bangladeshis tracking smarter.</p>
         <Link
           to="/auth?mode=register"
-          className="inline-block bg-white text-primary-700 font-bold px-10 py-4 rounded-xl hover:bg-primary-50 transition-all active:scale-95 shadow-lg text-lg"
+          className="inline-block bg-white text-primary-700 font-bold px-6 sm:px-10 py-3 sm:py-4 rounded-xl hover:bg-primary-50 transition-all active:scale-95 shadow-lg text-base sm:text-lg"
         >
           Create Free Account →
         </Link>

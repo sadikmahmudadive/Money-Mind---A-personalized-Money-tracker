@@ -74,10 +74,10 @@ export default function EditTransaction() {
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <button onClick={() => navigate(-1)}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition">
+          className="p-2.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition">
           <HiArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-2xl font-extrabold">Edit Transaction</h1>
+        <h1 className="text-xl sm:text-2xl font-extrabold">Edit Transaction</h1>
       </div>
 
       {/* Type toggle */}

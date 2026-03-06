@@ -34,13 +34,13 @@ export default function MonthlyChart({ transactions }) {
   return (
     <div className="card">
       <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-4">6-Month Overview</h3>
-      <ResponsiveContainer width="100%" height={220}>
+      <ResponsiveContainer width="100%" height={200}>
         <BarChart data={data} barGap={4}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-700" />
-          <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-          <YAxis tick={{ fontSize: 12 }} />
+          <XAxis dataKey="name" tick={{ fontSize: 11 }} interval={0} />
+          <YAxis tick={{ fontSize: 11 }} width={45} />
           <Tooltip content={<CustomTooltip />} />
-          <Legend iconType="circle" iconSize={8} />
+          <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 12 }} />
           <Bar dataKey="Income"   fill="#10b981" radius={[4,4,0,0]} />
           <Bar dataKey="Expenses" fill="#ef4444" radius={[4,4,0,0]} />
         </BarChart>

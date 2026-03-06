@@ -38,7 +38,7 @@ export default function CategoryPie({ transactions, title = 'Spending by Categor
   return (
     <div className="card">
       <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-4">{title}</h3>
-      <ResponsiveContainer width="100%" height={220}>
+      <ResponsiveContainer width="100%" height={200}>
         <PieChart>
           <Pie
             data={data}
@@ -46,7 +46,7 @@ export default function CategoryPie({ transactions, title = 'Spending by Categor
             cy="50%"
             labelLine={false}
             label={renderLabel}
-            outerRadius={90}
+            outerRadius={75}
             dataKey="value"
           >
             {data.map((entry, i) => (
@@ -60,6 +60,7 @@ export default function CategoryPie({ transactions, title = 'Spending by Categor
           <Legend
             iconType="circle"
             iconSize={8}
+            wrapperStyle={{ fontSize: 11, lineHeight: '18px' }}
             formatter={(v, entry) => `${entry.payload.icon} ${v}`}
           />
         </PieChart>
