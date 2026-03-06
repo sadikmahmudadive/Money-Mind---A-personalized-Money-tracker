@@ -34,5 +34,15 @@ export function useBudgets() {
     await deleteDoc(doc(db, 'users', user.uid, 'budgets', category))
   }, [user])
 
-  return { budgets, loading, setBudget, updateSpent, deleteBudget }
+  const toggleRollover = useCallback(async (category, enabled) => {
+    if (!user) return
+    await setDoc(doc(db, 'users', user.uid, 'budgets', category), { rollover: !!enabled }, { merge: true })
+  }, [user])
+
+  const setRolloverAmount = useCallback(async (category, amount) => {
+    if (!user) return
+    await setDoc(doc(db, 'users', user.uid, 'budgets', category), { rolloverAmount: Number(amount) }, { merge: true })
+  }, [user])
+
+  return { budgets, loading, setBudget, updateSpent, deleteBudget, toggleRollover, setRolloverAmount }
 }

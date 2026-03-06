@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTransactions } from '../hooks/useTransactions'
 import { useAuth } from '../context/AuthContext'
 import TransactionList from '../components/TransactionList'
-import { HiPlus, HiSearch, HiFilter, HiUpload, HiTag } from 'react-icons/hi'
+import { HiPlus, HiSearch, HiFilter, HiUpload, HiTag, HiDownload } from 'react-icons/hi'
 import { CATEGORIES } from '../utils/categories'
 import { toDateString } from '../utils/dateHelpers'
 import { formatCurrency } from '../utils/formatCurrency'
@@ -59,6 +59,57 @@ export default function Transactions() {
     toast.success(pinned ? 'Transaction pinned!' : 'Transaction unpinned')
   }
 
+  async function handleExportPDF() {
+    try {
+      const { default: jsPDF } = await import('jspdf')
+      await import('jspdf-autotable')
+      const doc = new jsPDF()
+      doc.setFontSize(16)
+      doc.text('Transactions Report', 14, 18)
+      doc.setFontSize(10)
+      doc.text(`Exported: ${new Date().toLocaleDateString()}  |  ${filtered.length} transactions`, 14, 26)
+      doc.autoTable({
+        startY: 32,
+        head: [['Date', 'Title', 'Category', 'Type', 'Amount']],
+        body: filtered.map(t => {
+          const d = t.date?.toDate ? t.date.toDate() : new Date(t.date)
+          return [
+            d.toLocaleDateString(),
+            t.title,
+            t.category,
+            t.type,
+            `${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount, currency)}`,
+          ]
+        }),
+        headStyles: { fillColor: [79, 70, 229] },
+      })
+      doc.save('transactions.pdf')
+      toast.success('PDF exported!')
+    } catch { toast.error('Failed to export PDF') }
+  }
+
+  function handleExportCSV() {
+    const header = 'Date,Title,Category,Type,Amount,Notes,Tags\n'
+    const rows = filtered.map(t => {
+      const d = t.date?.toDate ? t.date.toDate() : new Date(t.date)
+      return [
+        d.toISOString().slice(0, 10),
+        `"${(t.title ?? '').replace(/"/g, '""')}"`,
+        t.category,
+        t.type,
+        t.amount,
+        `"${(t.notes ?? '').replace(/"/g, '""')}"`,
+        `"${(t.tags ?? []).join(', ')}"`,
+      ].join(',')
+    }).join('\n')
+    const blob = new Blob([header + rows], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url; a.download = 'transactions.csv'; a.click()
+    URL.revokeObjectURL(url)
+    toast.success('CSV exported!')
+  }
+
   async function handleDelete(id) {
     if (!confirm('Delete this transaction?')) return
     await deleteTransaction(id)
@@ -110,6 +161,16 @@ export default function Transactions() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <h1 className="text-xl sm:text-2xl font-extrabold">Transactions</h1>
         <div className="flex items-center gap-2">
+          <div className="relative group">
+            <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+              <HiDownload className="w-4 h-4" />
+              <span className="hidden sm:inline">Export</span>
+            </button>
+            <div className="absolute right-0 top-full mt-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 min-w-[140px] hidden group-hover:block z-10">
+              <button onClick={handleExportPDF} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition">📄 Export PDF</button>
+              <button onClick={handleExportCSV} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition">📊 Export CSV</button>
+            </div>
+          </div>
           <button
             onClick={() => csvRef.current.click()}
             disabled={importing}

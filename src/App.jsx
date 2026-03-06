@@ -23,6 +23,17 @@ import SavingsGoals   from './pages/SavingsGoals'
 import SplitExpenses  from './pages/SplitExpenses'
 import YearlySummary  from './pages/YearlySummary'
 import CurrencyConverter from './pages/CurrencyConverter'
+import BillCalendar   from './pages/BillCalendar'
+import HealthScore    from './pages/HealthScore'
+import DataBackup     from './pages/DataBackup'
+import SpendingComparison from './pages/SpendingComparison'
+import CustomCategories from './pages/CustomCategories'
+import Wallets        from './pages/Wallets'
+import Templates      from './pages/Templates'
+import SpendingLimits from './pages/SpendingLimits'
+import SharedBudgets  from './pages/SharedBudgets'
+import DebtTracker    from './pages/DebtTracker'
+import Investments    from './pages/Investments'
 
 function AppLayout({ children }) {
   const [sideOpen, setSideOpen] = useState(false)
@@ -121,6 +132,61 @@ export default function App() {
             <Route path="/converter" element={
               <ProtectedRoute>
                 <AppLayout><CurrencyConverter /></AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/calendar" element={
+              <ProtectedRoute>
+                <AppLayout><BillCalendar /></AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/health" element={
+              <ProtectedRoute>
+                <AppLayout><HealthScore /></AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/backup" element={
+              <ProtectedRoute>
+                <AppLayout><DataBackup /></AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/comparison" element={
+              <ProtectedRoute>
+                <AppLayout><SpendingComparison /></AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/categories" element={
+              <ProtectedRoute>
+                <AppLayout><CustomCategories /></AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/wallets" element={
+              <ProtectedRoute>
+                <AppLayout><Wallets /></AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/templates" element={
+              <ProtectedRoute>
+                <AppLayout><Templates /></AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/spending-limits" element={
+              <ProtectedRoute>
+                <AppLayout><SpendingLimits /></AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/shared-budgets" element={
+              <ProtectedRoute>
+                <AppLayout><SharedBudgets /></AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/debts" element={
+              <ProtectedRoute>
+                <AppLayout><DebtTracker /></AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/investments" element={
+              <ProtectedRoute>
+                <AppLayout><Investments /></AppLayout>
               </ProtectedRoute>
             } />
 

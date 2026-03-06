@@ -2,7 +2,9 @@ import { NavLink, Link } from 'react-router-dom'
 import {
   HiViewGrid, HiCash, HiPlusCircle, HiChartPie,
   HiDocumentReport, HiUser, HiX, HiSparkles, HiRefresh, HiFlag,
-  HiUserGroup, HiCalendar, HiCurrencyDollar,
+  HiUserGroup, HiCalendar, HiCurrencyDollar, HiHeart, HiShieldCheck,
+  HiSwitchHorizontal, HiTag, HiCreditCard, HiLightningBolt, HiScale,
+  HiClipboardList, HiTrendingUp,
 } from 'react-icons/hi'
 
 const sections = [
@@ -12,30 +14,41 @@ const sections = [
       { to: '/dashboard',    icon: <HiViewGrid className="w-4.5 h-4.5" />,    label: 'Dashboard'    },
       { to: '/transactions', icon: <HiCash className="w-4.5 h-4.5" />,        label: 'Transactions' },
       { to: '/add',          icon: <HiPlusCircle className="w-4.5 h-4.5" />,  label: 'Add Transaction' },
+      { to: '/templates',    icon: <HiLightningBolt className="w-4.5 h-4.5" />, label: 'Templates' },
     ],
   },
   {
     label: 'Manage',
     links: [
-      { to: '/budgets',   icon: <HiChartPie className="w-4.5 h-4.5" />,       label: 'Budgets'      },
-      { to: '/recurring', icon: <HiRefresh className="w-4.5 h-4.5" />,        label: 'Recurring'    },
-      { to: '/goals',     icon: <HiFlag className="w-4.5 h-4.5" />,           label: 'Savings Goals'},
-      { to: '/splits',    icon: <HiUserGroup className="w-4.5 h-4.5" />,      label: 'Split Expenses'},
-      { to: '/converter', icon: <HiCurrencyDollar className="w-4.5 h-4.5" />, label: 'Currency Converter'},
+      { to: '/budgets',        icon: <HiChartPie className="w-4.5 h-4.5" />,       label: 'Budgets'      },
+      { to: '/shared-budgets', icon: <HiUserGroup className="w-4.5 h-4.5" />,      label: 'Shared Budgets' },
+      { to: '/spending-limits',icon: <HiScale className="w-4.5 h-4.5" />,          label: 'Spending Limits'},
+      { to: '/recurring',      icon: <HiRefresh className="w-4.5 h-4.5" />,        label: 'Recurring'    },
+      { to: '/calendar',       icon: <HiCalendar className="w-4.5 h-4.5" />,       label: 'Bill Calendar'},
+      { to: '/goals',          icon: <HiFlag className="w-4.5 h-4.5" />,           label: 'Savings Goals'},
+      { to: '/wallets',        icon: <HiCreditCard className="w-4.5 h-4.5" />,     label: 'Wallets'},
+      { to: '/splits',         icon: <HiSwitchHorizontal className="w-4.5 h-4.5" />, label: 'Split Expenses'},
+      { to: '/categories',     icon: <HiTag className="w-4.5 h-4.5" />,            label: 'Categories'},
+      { to: '/debts',          icon: <HiClipboardList className="w-4.5 h-4.5" />,  label: 'Debt Tracker'},
+      { to: '/investments',    icon: <HiTrendingUp className="w-4.5 h-4.5" />,     label: 'Investments'},
+      { to: '/converter',      icon: <HiCurrencyDollar className="w-4.5 h-4.5" />, label: 'Converter'},
     ],
   },
   {
     label: 'Insights',
     links: [
-      { to: '/reports', icon: <HiDocumentReport className="w-4.5 h-4.5" />, label: 'Reports'     },
-      { to: '/yearly', icon: <HiCalendar className="w-4.5 h-4.5" />,        label: 'Yearly Summary'},
-      { to: '/ai',      icon: <HiSparkles className="w-4.5 h-4.5" />,       label: 'AI Insights' },
+      { to: '/reports',    icon: <HiDocumentReport className="w-4.5 h-4.5" />, label: 'Reports'     },
+      { to: '/yearly',     icon: <HiCalendar className="w-4.5 h-4.5" />,       label: 'Yearly Summary'},
+      { to: '/comparison', icon: <HiSwitchHorizontal className="w-4.5 h-4.5" />, label: 'Comparison'},
+      { to: '/health',     icon: <HiHeart className="w-4.5 h-4.5" />,          label: 'Health Score'},
+      { to: '/ai',         icon: <HiSparkles className="w-4.5 h-4.5" />,       label: 'AI Insights' },
     ],
   },
   {
     label: 'Account',
     links: [
-      { to: '/profile', icon: <HiUser className="w-4.5 h-4.5" />, label: 'Profile' },
+      { to: '/profile', icon: <HiUser className="w-4.5 h-4.5" />,         label: 'Profile' },
+      { to: '/backup',  icon: <HiShieldCheck className="w-4.5 h-4.5" />,  label: 'Backup & Restore' },
     ],
   },
 ]

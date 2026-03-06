@@ -11,7 +11,7 @@ import toast from 'react-hot-toast'
 import { HiPlus } from 'react-icons/hi'
 
 export default function BudgetManager() {
-  const { budgets, setBudget, deleteBudget, loading } = useBudgets()
+  const { budgets, setBudget, deleteBudget, toggleRollover, loading } = useBudgets()
   const { transactions } = useTransactions()
   const { profile } = useAuth()
   const currency = profile?.currency ?? 'BDT'
@@ -31,7 +31,8 @@ export default function BudgetManager() {
     const spent = transactions
       .filter(t => t.type === 'expense' && t.category === b.category && isInMonth(t.date, currentMonth))
       .reduce((s, t) => s + t.amount, 0)
-    return { ...b, spent }
+    const effectiveLimit = b.limit + (b.rollover ? (b.rolloverAmount ?? 0) : 0)
+    return { ...b, spent, effectiveLimit }
   })
 
   // Budget alerts
@@ -155,7 +156,22 @@ export default function BudgetManager() {
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {budgetsWithSpent.map(b => (
-            <BudgetCard key={b.category} {...b} currency={currency} onDelete={handleDelete} />
+            <div key={b.category} className="space-y-2">
+              <BudgetCard {...b} currency={currency} onDelete={handleDelete} />
+              <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-800/50 text-xs">
+                <span className="text-gray-500">Rollover unused</span>
+                <button
+                  onClick={() => toggleRollover(b.category, !b.rollover)}
+                  className={`relative w-9 h-5 rounded-full transition ${b.rollover ? 'bg-primary-500' : 'bg-gray-300 dark:bg-gray-700'}`}
+                >
+                  <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${b.rollover ? 'left-4.5' : 'left-0.5'}`} 
+                    style={{ left: b.rollover ? '18px' : '2px' }} />
+                </button>
+              </div>
+              {b.rollover && b.rolloverAmount > 0 && (
+                <p className="text-xs text-primary-500 px-3">+{formatCurrency(b.rolloverAmount, currency)} rolled over</p>
+              )}
+            </div>
           ))}
         </div>
       )}
